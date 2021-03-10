@@ -51,6 +51,19 @@ namespace Tengri.ServiceUser
                 .Any();
         }
 
+        /// <summary>
+        /// Метод возвращет пользователя по его ID
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <returns></returns>
+        public bool IsExistUser(int userId)
+        {
+            List<User> users = db.GetCollection<User>();
+            return users
+                .Where(w => w.id == userId)
+                .Any();
+        }
+
         public User GetUser(string login, string password)
         {
             string message = "";
