@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tengri.ServiceAccount;
 using Tengri.ServiceUser;
 
 namespace Tengri.OnlineApp
@@ -48,12 +49,55 @@ namespace Tengri.OnlineApp
             }            
         }
 
-        public static void AuthUserMenu()
+        public static void AuthUserMenu(ServiceAccount.SettingsAccount serviceAccount, User user)
         {
             Console.WriteLine("1. Список счетов");
             Console.WriteLine("2. Пополнить счет");
             Console.WriteLine("3. Перевести деньги");
-            Console.WriteLine("4. Выход");
+            Console.WriteLine("4. Создать счет");
+            Console.WriteLine("5. Выход");
+            int userInput = int.Parse(Console.ReadLine());
+            switch (userInput)
+            {
+                case 1:
+                    {
+                        //Console.Clear();
+                        foreach (Account acc in serviceAccount.GetUserAccounts(user.id))
+                        {
+                            Console.WriteLine(acc.Id+". " + acc.IBAN+" - "+ acc.Balance+" тенге");
+                        } 
+                    }
+                    
+                    break;
+                    case 2:
+                    {
+                        foreach (Account acc in serviceAccount.GetUserAccounts(user.id))
+                        {
+                            Console.WriteLine(acc.Id + ". " + acc.IBAN + " - " + acc.Balance + " тенге");
+                        }
+                        Console.Write("Выберите счет: ");
+                        int accId = int.Parse(Console.ReadLine());
+                        
+                        decimal addMoney = 0;
+                        Console.Write("Введите сумму пополнения счета: ");
+                        addMoney = Convert.ToDecimal(Console.ReadLine());
+
+                        serviceAccount.AddMoney(accId, addMoney);
+                    }  
+                       break;
+                case 4:
+                    if(serviceAccount.CreateAccount(user.id, out ServiceAccount.Account account))
+                    {
+                        Console.WriteLine("Поздравляем! Ваш счет создан.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Некорректные данные! Попробуйте еще раз.");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

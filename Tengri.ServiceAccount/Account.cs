@@ -14,7 +14,7 @@ namespace Tengri.ServiceAccount
         public int Id { get; set; }
         public int UserId { get; set; }
         public string IBAN { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
         public decimal Balance { get; set; }
         public int Status { get; set; }
 

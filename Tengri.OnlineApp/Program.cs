@@ -13,11 +13,12 @@ namespace Tengri.OnlineApp
     {
         private static ILog log = LogManager.GetLogger("LOGGER");
 
+        private static string pathForDb = @"C:\Users\ГерценЕ\Desktop\Tengri.OnlineApp\Tengri.OnlineApp\bin\Debug\bank.db";
         static void Main(string[] args)
         {
             XmlConfigurator.Configure();
 
-            ServiceMenu.WelcomeMenu();
+                ServiceMenu.WelcomeMenu();
 
             string login = "";
             string password = "";
@@ -25,13 +26,13 @@ namespace Tengri.OnlineApp
 
             try
             {
-                ServicesUser service = new ServicesUser(@"C:\Users\ГерценЕ\Desktop\Tengri.OnlineApp\Tengri.OnlineApp\bin\Debug\bank.db");
-
+                ServicesUser service = new ServicesUser(pathForDb);
+                ServiceAccount.SettingsAccount serviceAccount = new Tengri.ServiceAccount.SettingsAccount(pathForDb);
                 User user = service.GetUser(login, password);
                 if (user != null && user.status == 0)
                 {
                     ServiceMenu.WelcomeUserMenu(user);
-                    ServiceMenu.AuthUserMenu();
+                    ServiceMenu.AuthUserMenu(serviceAccount, user);
                 }
                 else if (user != null && user.status == 2)
                 {

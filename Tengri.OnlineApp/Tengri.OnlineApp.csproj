@@ -57,6 +57,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tengri.ServiceAccount\Tengri.ServiceAccount.csproj">
+      <Project>{8b56265f-6d91-4c41-98d2-946f5ab2452b}</Project>
+      <Name>Tengri.ServiceAccount</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tengri.ServiceUser\Tengri.ServiceUser.csproj">
       <Project>{cabeab0a-60bf-4df9-b76b-60a884828a00}</Project>
       <Name>Tengri.ServiceUser</Name>
