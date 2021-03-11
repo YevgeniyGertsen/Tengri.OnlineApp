@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace Tengri.ServiceUser
 {
     public class ServicesUser
@@ -25,6 +27,9 @@ namespace Tengri.ServiceUser
             else
             {
                 string message = "";
+                Tengri.GBD.ServiceGBDinfo ser = new GBD.ServiceGBDinfo();
+                
+                user.personalData = ser.GetInfo(user.Iin);
                 if (!db.Create<User>(user, out message))
                     throw new Exception(message);
                 else
