@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Tengri.ServiceAccount;
 using Tengri.ServiceUser;
@@ -49,7 +50,7 @@ namespace Tengri.OnlineApp
             }            
         }
 
-        public static void AuthUserMenu(ServiceAccount.SettingsAccount serviceAccount, User user)
+        public static void AuthUserMenu(SettingsAccount serviceAccount, User user)
         {
             Console.WriteLine("1. Список счетов");
             Console.WriteLine("2. Пополнить счет");
@@ -61,20 +62,29 @@ namespace Tengri.OnlineApp
             {
                 case 1:
                     {
+                        Console.WriteLine(new String('-',20));
+                        Console.WriteLine("");
+
+                        foreach (Account acc in serviceAccount[1, user.id])
+                            acc.PrintAccountBaseInfo();
+
+                        foreach (var acc in serviceAccount[2, user.id])
+                            acc.PrintAccountBaseInfo();
+
+                        Thread.Sleep(3000);
+                        AuthUserMenu(serviceAccount, user);
+
                         //Console.Clear();
-                        foreach (Account acc in serviceAccount.GetUserAccounts(user.id))
-                        {
-                            Console.WriteLine(acc.Id+". " + acc.IBAN+" - "+ acc.Balance+" тенге");
-                        } 
+                        //foreach (Account acc in serviceAccount.GetUserAccounts(user.id))
+                        //{
+                        //    Console.WriteLine(acc.Id+". " + acc.IBAN+" - "+ acc.Balance+" тенге");
+                        //} 
                     }
                     
                     break;
                     case 2:
                     {
-                        foreach (Account acc in serviceAccount.GetUserAccounts(user.id))
-                        {
-                            Console.WriteLine(acc.Id + ". " + acc.IBAN + " - " + acc.Balance + " тенге");
-                        }
+                       
                         Console.Write("Выберите счет: ");
                         int accId = int.Parse(Console.ReadLine());
                         
@@ -85,10 +95,38 @@ namespace Tengri.OnlineApp
                         serviceAccount.AddMoney(accId, addMoney);
                     }  
                        break;
+                case 3:
+                    {
+                        Console.Write("Выберите счет отправления: ");
+                        int countOne = int.Parse(Console.ReadLine());
+
+                        Console.Write("Выберите счет получателя: ");
+                        int countSecond = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Сумма перевода: ");
+                        decimal amount = decimal.Parse(Console.ReadLine());
+
+                        serviceAccount.CreateTransaction(countOne, countSecond, amount, user.id);
+
+                    }
+                    break;
+
                 case 4:
                     if(serviceAccount.CreateAccount(user.id, out ServiceAccount.Account account))
                     {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            Console.Write(".");
+                            Thread.Sleep(500);
+                        }
+                        Console.WriteLine();
                         Console.WriteLine("Поздравляем! Ваш счет создан.");
+                        Thread.Sleep(3000);
+
+
+
+                        Console.Clear();
+                        AuthUserMenu(serviceAccount, user);
                     }
                     else
                     {
